@@ -8,27 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Используем официальный Docker-образ devkitPro
+    container: devkitpro/devkita64:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install devkitPro
-        run: |
-          # Скачиваем и запускаем официальный скрипт установки
-          wget https://raw.githubusercontent.com/devkitPro/installer/master/bin/linux-x86_64/devkitpro-pacman-installer
-          chmod +x devkitpro-pacman-installer
-          sudo ./devkitpro-pacman-installer
-          # Устанавливаем необходимые пакеты
-          sudo dkp-pacman -S --noconfirm switch-dev switch-libnx
-
       - name: Build project
         run: |
-          # Устанавливаем переменные окружения
-          export DEVKITPRO=/opt/devkitpro
-          export DEVKITARM=$DEVKITPRO/devkitARM
-          export DEVKITA64=$DEVKITPRO/devkitA64
-          export PATH=$PATH:$DEVKITPRO/tools/bin:$DEVKITARM/bin:$DEVKITA64/bin
-          # Собираем
           make -j8
 
       - name: Upload .nro artifact
