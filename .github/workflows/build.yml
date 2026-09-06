@@ -1,0 +1,30 @@
+name: Build Switch Homebrew
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install libnx
+        run: |
+          dkp-pacman -Syu --noconfirm
+          dkp-pacman -S --noconfirm switch-libnx
+
+      - name: Build project
+        run: |
+          make -j8
+
+      - name: Upload .nro artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-switch
+          path: hello_switch.nro
