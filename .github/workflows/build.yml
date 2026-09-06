@@ -8,11 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Используем официальный Docker-образ devkitPro
     container: devkitpro/devkita64:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Build and install libnx from source
+        run: |
+          # Клонируем libnx
+          git clone --depth 1 https://github.com/switchbrew/libnx.git
+          cd libnx
+          # Собираем и устанавливаем
+          make -j8
+          make install
+          # Проверяем, что файлы установились
+          ls -la /opt/devkitpro/libnx/include/switch.h || echo "switch.h not found"
 
       - name: Build project
         run: |
