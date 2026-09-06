@@ -16,6 +16,8 @@ jobs:
 
       - name: Fix pacman repositories
         run: |
+          # Создаём папку, если её нет
+          mkdir -p /etc/pacman.d
           # Создаём правильный файл с зеркалами
           echo "Server = https://downloads.devkitpro.org/packages" > /etc/pacman.d/dkp-mirrorlist
           echo "Server = https://www.mirrorservice.org/sites/downloads.devkitpro.org/packages" >> /etc/pacman.d/dkp-mirrorlist
@@ -24,7 +26,7 @@ jobs:
 
       - name: Install libnx
         run: |
-          # Устанавливаем библиотеку с правильным именем
+          # Устанавливаем библиотеку
           dkp-pacman -S --noconfirm switch-libnx
 
       - name: Build project
