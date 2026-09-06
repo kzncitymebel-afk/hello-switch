@@ -14,9 +14,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Fix pacman repositories
+        run: |
+          # Создаём правильный файл с зеркалами
+          echo "Server = https://downloads.devkitpro.org/packages" > /etc/pacman.d/dkp-mirrorlist
+          echo "Server = https://www.mirrorservice.org/sites/downloads.devkitpro.org/packages" >> /etc/pacman.d/dkp-mirrorlist
+          # Обновляем список пакетов
+          pacman -Syy
+
       - name: Install libnx
         run: |
-          dkp-pacman -Syu --noconfirm
+          # Устанавливаем библиотеку с правильным именем
           dkp-pacman -S --noconfirm switch-libnx
 
       - name: Build project
