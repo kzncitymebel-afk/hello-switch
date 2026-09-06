@@ -8,29 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: devkitpro/devkita64:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fix pacman repositories
-        run: |
-          # Создаём папку, если её нет
-          mkdir -p /etc/pacman.d
-          # Создаём правильный файл с зеркалами
-          echo "Server = https://downloads.devkitpro.org/packages" > /etc/pacman.d/dkp-mirrorlist
-          echo "Server = https://www.mirrorservice.org/sites/downloads.devkitpro.org/packages" >> /etc/pacman.d/dkp-mirrorlist
-          # Обновляем список пакетов
-          pacman -Syy
-
-      - name: Install libnx
-        run: |
-          # Устанавливаем библиотеку
-          dkp-pacman -S --noconfirm switch-libnx
+      - name: Setup devkitPro
+        uses: devkitPro/installer-action@v1
 
       - name: Build project
         run: |
+          # Устанавливаем переменные окружения
+          export DEVKITPRO=/opt/devkitpro
+          export DEVKITARM=$DEVKITPRO/devkitARM
+          export DEVKITA64=$DEVKITPRO/devkitA64
+          export PATH=$PATH:$DEVKITPRO/tools/bin:$DEVKITARM/bin:$DEVKITA64/bin
+          # Собираем
           make -j8
 
       - name: Upload .nro artifact
