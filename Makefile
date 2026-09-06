@@ -47,10 +47,11 @@ endif
 export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o)
 export OFILES 	:=	$(OFILES_SRC)
 
+# Ищем libnx в папке libnx в корне репозитория
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
-			-I$(DEVKITPRO)/libnx/include
+			-I$(CURDIR)/libnx/include
 
-export LIBPATHS	:=	-L$(DEVKITPRO)/libnx/lib
+export LIBPATHS	:=	-L$(CURDIR)/libnx/lib
 
 .PHONY: all clean
 
