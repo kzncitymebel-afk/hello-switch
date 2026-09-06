@@ -12,8 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup devkitPro
-        uses: devkitPro/installer-action@v1
+      - name: Install devkitPro
+        run: |
+          # Скачиваем и запускаем официальный скрипт установки
+          wget https://raw.githubusercontent.com/devkitPro/installer/master/bin/linux-x86_64/devkitpro-pacman-installer
+          chmod +x devkitpro-pacman-installer
+          sudo ./devkitpro-pacman-installer
+          # Устанавливаем необходимые пакеты
+          sudo dkp-pacman -S --noconfirm switch-dev switch-libnx
 
       - name: Build project
         run: |
