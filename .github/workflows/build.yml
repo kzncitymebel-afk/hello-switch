@@ -15,14 +15,13 @@ jobs:
 
       - name: Build and install libnx from source
         run: |
-          # Клонируем libnx
+          # Клонируем libnx прямо в корень репозитория
           git clone --depth 1 https://github.com/switchbrew/libnx.git
           cd libnx
-          # Собираем и устанавливаем
+          # Собираем (без установки)
           make -j8
-          make install
-          # Проверяем, что файлы установились
-          ls -la /opt/devkitpro/libnx/include/switch.h || echo "switch.h not found"
+          # Проверяем, что библиотека создалась
+          ls -la lib/libnx.a
 
       - name: Build project
         run: |
